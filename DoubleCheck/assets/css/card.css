@@ -1,0 +1,245 @@
+.order-card {
+    color: #fff;
+}
+
+.body {
+    font-family: "Poppins", sans-serif;
+}
+
+.bg-c-blue {
+    background: linear-gradient(45deg, #4099ff, #73b4ff);
+}
+
+.bg-c-green {
+    background: linear-gradient(45deg, #2ed8b6, #59e0c5);
+}
+
+.bg-c-yellow {
+    background: linear-gradient(45deg, #ffb64d, #ffcb80);
+}
+
+.bg-c-pink {
+    background: linear-gradient(45deg, #ff5370, #ff869a);
+}
+
+/* Varian Monokrom Abu-abu */
+.bg-c-gray {
+    background: linear-gradient(45deg, #878787, #757575);
+}
+
+/* Varian Monokrom Biru Tua */
+.bg-c-dark-blue {
+    background: linear-gradient(45deg, #1a237e, #3f51b5) !important;
+}
+
+/* Varian Monokrom Cokelat Tua */
+.bg-c-brown {
+    background: linear-gradient(45deg, #3e2723, #6d4c41);
+}
+
+/* Varian Monokrom Hijau Tua */
+.bg-c-dark-green {
+    background: linear-gradient(45deg, #1b5e20, #4caf50);
+}
+.card {
+    border: none;
+    border-radius: 20px;
+    color: #fff;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    height: 250px;
+}
+
+.card-header {
+    padding: 20px;
+    border-bottom: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.card-title {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+.card-body {
+    padding: 0 20px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Menambahkan ini untuk pemusatan vertikal */
+}
+
+.sub-div {
+    margin-bottom: 5px; /* Mengurangi margin */
+}
+
+.text-sub {
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.8);
+    margin: 0;
+}
+
+.row-divider {
+    display: flex;
+    margin-bottom: 10px; /* Mengurangi margin */
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.row-divider > div {
+    padding: 10px 0; /* Mengurangi padding */
+    background-color: rgba(255, 255, 255, 0.1);
+    transition: background-color 0.3s ease;
+}
+
+.row-divider > div:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.row-divider .col-6:first-child {
+    border-right: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.text-label {
+    margin: 0;
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.7);
+    text-transform: uppercase;
+}
+
+.text-number {
+    margin: 5px 0 0 0;
+    font-size: 1.2rem; /* Ukuran font disesuaikan */
+    font-weight: 700;
+}
+
+.gap-section {
+    margin-bottom: 10px; /* Mengurangi margin */
+}
+
+.gap-section > div {
+    background-color: transparent;
+    padding: 0;
+}
+.number-gap {
+    margin: 5px 0 0 0;
+    font-size: 1.5rem; /* Ukuran font disesuaikan */
+    font-weight: 700;
+}
+
+/* --- CSS untuk Tautan Detail di Header --- */
+.detail-link {
+    color: #fff;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9rem;
+    padding: 5px 10px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.detail-link:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* ---------------------------------------------------- */
+/* MEDIA QUERY: Perubahan untuk layar <= 768px */
+/* ---------------------------------------------------- */
+@media (max-width: 768px) {
+    .col-sm-12 {
+        flex: 0 0 auto;
+        width: 50%;
+    }
+
+    body {
+        transform: scale(0.7);
+        transform-origin: 0 0; /* Memastikan penskalaan dimulai dari sudut kiri atas */
+        width: 142.85%; /* 100 / 0.7 = 142.85 untuk menghindari scroll horizontal */
+        overflow-x: hidden;
+    }
+
+    .row {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .card-title {
+        /* Ukuran asli: 1.25rem (20px) -> Ukuran baru: 0.875rem (14px) */
+        font-size: 1.3rem;
+    }
+
+    .text-sub {
+        /* Ukuran asli: 0.9rem (14.4px) -> Ukuran baru: 0.63rem (10.08px) */
+        font-size: 1.2rem;
+    }
+
+    .text-label {
+        /* Ukuran asli: 0.8rem (12.8px) -> Ukuran baru: 0.56rem (8.96px) */
+        font-size: 1rem;
+    }
+
+    .text-number {
+        /* Ukuran asli: 1.2rem (19.2px) -> Ukuran baru: 0.84rem (13.44px) */
+        font-size: 1.3rem;
+    }
+
+    .number-gap {
+        /* Ukuran asli: 1.5rem (24px) -> Ukuran baru: 1.05rem (16.8px) */
+        font-size: 1.3rem;
+    }
+
+    .card {
+        border: none;
+        border-radius: 20px;
+        color: #fff;
+        height: 270px; /* Tinggi card diubah menjadi 180px */
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        display: flex;
+        flex-direction: column;
+    }
+
+    .card-header {
+        padding: 8px 20px; /* Padding disesuaikan */
+        border-bottom: none;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .card-body {
+        padding: 0 20px;
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .sub-div {
+        margin-bottom: 2px; /* Margin dikurangi */
+    }
+
+    .row-divider {
+        display: flex;
+        margin-bottom: 5px; /* Margin dikurangi */
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+    .row-divider > div {
+        padding: 8px 0; /* Padding dikurangi */
+        background-color: rgba(255, 255, 255, 0.1);
+        transition: background-color 0.3s ease;
+    }
+}
+
+@media (max-width: 450px) {
+    .col-sm-12 {
+        flex: 0 0 auto;
+        width: 95% !important;
+    }
+}

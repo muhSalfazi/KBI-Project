@@ -1,0 +1,23 @@
+.option-picker {
+    display: flex;
+    border: 1px solid #ced4da;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    cursor: pointer;
+    width: 100%;
+}
+.option-picker-item {
+    flex-grow: 1;
+    padding: 5px 2rem;
+    text-align: center;
+    font-weight: bold;
+    color: #495057;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+.option-picker-item:first-child {
+    border-right: 1px solid #ced4da;
+}
+.option-picker-item.active {
+    background-color: #0d6efd; /* Warna biru Bootstrap */
+    color: #fff;
+}

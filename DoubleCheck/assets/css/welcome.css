@@ -1,0 +1,334 @@
+:root {
+    --bg-color: #f3f4f6;
+    --card-bg: #ffffff;
+    --text-primary: #111827;
+    --text-secondary: #6b7280;
+    --border-color: #e5e7eb;
+    --accent-color: #2563eb;
+    --shadow-color: rgba(0, 0, 0, 0.1);
+    --pending-color: #dc2626;
+}
+body.dark-mode {
+    --bg-color: #111827;
+    --card-bg: #1f2937;
+    --text-primary: #f9fafb;
+    --text-secondary: #9ca3af;
+    --border-color: #374151;
+    --accent-color: #38bdf8;
+    --shadow-color: rgba(0, 0, 0, 0.2);
+    --pending-color: #fca5a5;
+}
+body {
+    font-family: "Segoe UI", "Roboto", "Helvetica Neue", sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-secondary);
+    margin: 0;
+    padding: 24px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+/* PENYESUAIAN: Lebar header diperlebar dan disamakan dengan dashboard */
+.main-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 32px;
+    max-width: 1400px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.header-title-container {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+.header-logo {
+    height: 40px;
+    width: 40px;
+}
+h1 {
+    color: var(--text-primary);
+    margin: 0;
+    font-size: 1.75rem;
+    font-weight: 600;
+}
+.controls-container {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+.filter-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.filter-group input,
+.filter-group select,
+.filter-group button {
+    padding: 8px 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 14px;
+    background-color: var(--card-bg);
+    color: var(--text-secondary);
+}
+.filter-group button {
+    background-color: var(--accent-color);
+    color: white;
+    cursor: pointer;
+    font-weight: 500;
+    border-color: var(--accent-color);
+}
+.theme-switch-wrapper {
+    display: flex;
+    align-items: center;
+}
+.theme-switch {
+    display: inline-block;
+    height: 24px;
+    position: relative;
+    width: 48px;
+}
+.theme-switch input {
+    display: none;
+}
+.slider {
+    background-color: #ccc;
+    bottom: 0;
+    cursor: pointer;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    transition: 0.4s;
+    border-radius: 24px;
+}
+.slider:before {
+    background-color: #fff;
+    bottom: 4px;
+    content: "";
+    height: 16px;
+    left: 4px;
+    position: absolute;
+    transition: 0.4s;
+    width: 16px;
+    border-radius: 50%;
+}
+input:checked + .slider {
+    background-color: var(--accent-color);
+}
+input:checked + .slider:before {
+    transform: translateX(24px);
+}
+.actual-value {
+    color: black;
+}
+
+/* Styling untuk status jika tidak sesuai dengan plan */
+.actual-value.mismatch {
+    color: red;
+}
+
+.kpi-title {
+    font-size: 1.1em;
+    font-weight: 500;
+    color: var(--text-secondary);
+    margin-bottom: 16px;
+}
+.kpi-value {
+    font-size: 3rem; /* Ukuran dasar untuk nilai aktual */
+    font-weight: bold;
+    color: #1a202c; /* Warna default */
+    display: flex; /* Mengatur tata letak inline */
+    align-items: baseline;
+    justify-content: center;
+}
+.kpi-value .plan-value,
+.kpi-value .plan-divider {
+    font-size: 50%; /* Ukuran font 60% dari ukuran dasar kpi-value */
+    margin-left: 5px; /* Memberi jarak dari nilai aktual */
+    color: #4a5568; /* Warna default yang lebih redup */
+}
+/* Kelas untuk warna hijau ketika actual === plan */
+.kpi-value.completed {
+    color: #4CAF50; /* Warna hijau */
+}
+.kpi-pending {
+    font-size: 1em;
+    color: var(--pending-color);
+    margin-top: 8px;
+}
+.chart-container {
+    width: 100%;
+    height: 110px;
+    margin-top: 20px;
+}
+#loader {
+    text-align: center;
+    font-size: 1.5em;
+    padding: 40px;
+    display: none;
+}
+#customer-title-display {
+    color: var(--accent-color);
+    font-weight: 700;
+    margin-left: 16px;
+    background-color: var(--card-bg);
+    padding: 4px 12px;
+    border-radius: 8px;
+    font-size: 0.8em;
+    border: 1px solid var(--border-color);
+}
+
+/* --- PERUBAHAN UTAMA: MENGGUNAKAN CSS GRID --- */
+.dashboard-container {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr); /* Membuat 6 kolom fleksibel */
+    gap: 28px;
+    width: 100%;
+    max-width: 1400px; /* Lebar maksimal diperbesar */
+    margin: 0 auto;
+}
+.card {
+    background-color: var(--card-bg);
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 4px 6px -1px var(--shadow-color),
+        0 2px 4px -1px var(--shadow-color);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    text-align: center;
+    border: 1px solid var(--border-color);
+    border-top-width: 4px;
+    transition: background-color 0.3s, border-color 0.3s;
+    /* Properti flex tidak lagi diperlukan */
+}
+
+/* Mengatur kartu mana yang lebar (3 kolom) dan mana yang standar (2 kolom) */
+.card.card-order,
+.card.card-prepare,
+.card.card-leader-check {
+    grid-column: span 2; /* Setiap kartu ini memakan 3 dari 6 kolom */
+}
+.card.card-doc-check,
+.card.card-loading {
+    grid-column: span 3; /* Setiap kartu ini memakan 2 dari 6 kolom */
+}
+
+.card-order {
+    border-top-color: #3b82f6;
+}
+.card-prepare {
+    border-top-color: #f59e0b;
+}
+.card-leader-check {
+    border-top-color: #8b5cf6;
+}
+.card-doc-check {
+    border-top-color: #10b981;
+}
+.card-loading {
+    border-top-color: #ef4444;
+}
+
+.running-text {
+    margin-top: 10px;
+    background-color: #ffff7df3;
+}
+.ticker-text {
+    display: inline-block;
+    white-space: nowrap;
+    animation: ticker 50s linear infinite;
+    color: red;
+}
+
+@keyframes ticker {
+    0%   { transform: translateX(100%); }
+    100% { transform: translateX(-100%); }
+}
+
+footer {
+    text-align: center;
+    margin-top: 15px;
+    padding: 20px;
+    font-size: 0.8em;
+    cfooterolor: var(--text-secondary);
+}
+
+.login-theme-group {
+    display: flex;
+    align-items: center; /* Vertikal sejajar */
+    gap: 10px; /* Jarak antar elemen */
+}
+
+.login-theme-group .button {
+    padding: 5px 12px;
+    background-color: #2563eb;
+    color: white;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 500;
+    display: inline-block;
+}
+/* --- START: MOBILE RESPONSIVE STYLES --- */
+@media (max-width: 768px) {
+    .login-theme-group {
+        justify-content: space-between; /* switch di kiri, login di kanan */
+        width: 100%; /* pastikan penuh */
+    }
+    body {
+        padding: 16px;
+    }
+
+    h1 {
+        font-size: 1.5rem;
+    }
+
+    .main-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 20px;
+    }
+
+    .header-title-container {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+
+    .controls-container {
+        flex-direction: column;
+        align-items: stretch;
+        width: 100%;
+        gap: 12px;
+    }
+
+    .filter-group {
+        flex-direction: column;
+        align-items: stretch;
+        width: 100%;
+    }
+
+    .filter-group input,
+    .filter-group select,
+    .filter-group button {
+        width: 100%;
+        box-sizing: border-box; /* Ensures padding and border are included in the element's total width and height. */
+    }
+
+    .dashboard-container {
+        grid-template-columns: 1fr; /* Stack all cards in a single column */
+        gap: 16px;
+    }
+
+    .card {
+        grid-column: span 1; /* Each card now spans a single column */
+    }
+
+    .kpi-value {
+        font-size: 2.5em; /* Adjust font size for smaller screens */
+    }
+}
+/* --- END: MOBILE RESPONSIVE STYLES --- */

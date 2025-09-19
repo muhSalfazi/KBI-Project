@@ -1,0 +1,318 @@
+<?php
+
+namespace App\Services;
+
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Carbon\Carbon;
+
+class DashboardServices {
+
+    private $customerName = [
+        'vw_data_hpm' => 'HPM',
+        'vw_data_adm' => 'ADM',
+        'vw_data_hino' => 'HINO',
+        'vw_data_suzuki' => 'SUZUKI',
+        'vw_data_mmki' => 'MMKI',
+        'vw_data_tmmin' => 'TMMIN'
+        // Add other customer tables as needed
+    ];
+
+
+    public function cardChecked(array $filters = []) {
+        $allData = $this->dataToday($filters);
+        $dnNo = $allData->pluck('dn_no');
+        $jobNo = $allData->pluck('job_no');
+
+        $statuses = DB::table('tbl_kbndelivery')
+            ->select('kbndn_no', 'check_leader')
+            ->whereIn('dn_no', $dnNo )
+            ->whereIn('job_no', $jobNo)
+            ->get()
+            ->groupBy('dn_no')
+            ->map(function ($group) {
+                return $group->last();
+            });
+
+        $dataWithStatus = $allData->map(function ($item) use ($statuses) {
+            $status = $statuses[$item->dn_no] ?? null;
+            $item->check_leader = $status ? $status->check_leader : null;
+            return $item;
+        });
+
+        return [
+            'data' => $dataWithStatus,
+            'totalPlan' => $dataWithStatus->sum('qty_pcs'),
+            'totalActual' => $dataWithStatus->sum(function($item) {
+                return $item->QtyPerKbn * $item->countP;
+            })
+        ];
+    }
+
+    public function dataToday(array $filters = []) {
+        $tables = ['vw_data_hpm', 'vw_data_mmki', 'vw_data_tmmin', 'vw_data_suzuki', 'vw_data_adm', 'vw_data_hino'];
+
+        $baseQuery = null;
+        foreach($tables as $t) {
+            $customerName = $this->customerName[$t];
+            if (!empty($filters['customer']) && $customerName != $filters['customer']) {
+                continue;
+            }
+
+            $query = DB::table($t)
+                ->selectRaw('
+                    tanggal_order,
+                    dn_no,
+                    job_no,
+                    cycle,
+                    customerpart_no,
+                    InvId,
+                    PartName,
+                    PartNo,
+                    qty_pcs,
+                    QtyPerKbn,
+                    countP,
+                    status_label,
+                    ? as customer_name,
+                    NULL as status',
+                    [$customerName]
+                )
+                ->when(!empty($filters['tanggal_order']), function ($query) use ($filters) {
+                    return $query->where('tanggal_order', $filters['tanggal_order']);
+                }, function ($query) {
+                    return $query->where('tanggal_order', Carbon::today()->format('d-m-Y'));
+                })
+                ->when(isset($filters['status_label']), function ($query) use ($filters) {
+                    return $query->where('status_label', $filters['status_label']);
+                });
+
+            if($baseQuery === null) {
+                $baseQuery = $query;
+            } else {
+                $baseQuery->unionAll($query);
+            }
+        }
+
+        $result = $baseQuery->get();
+        $dnNo = $result->pluck('dn_no')->unique()->toArray();
+        $jobNo = $result->pluck('job_no')->unique()->toArray();
+
+        // Get semua data dari tbl_kbndelivery yang sesuai
+        $statusesKbn = DB::table('tbl_kbndelivery')
+            ->select('dn_no', 'kbndn_no', 'job_no', 'check_leader', 'check_loading', 'check_sj')
+            ->whereIn('dn_no', $dnNo)
+            ->whereIn('job_no', $jobNo)
+            ->get();
+
+        // Get status dari tb_input_log berdasarkan data yang ada di tbl_kbndelivery
+        $statusesAdmin = DB::table('tb_input_log')
+            ->select('no_dn', 'status')
+            ->whereIn('no_dn', $dnNo)
+            ->pluck('status', 'no_dn');
+
+        // buat lookup cycle dari result
+        $resultLookup = $result->mapWithKeys(function ($r) {
+            $key = $r->dn_no . '|' . $r->job_no;
+            return [$key => $r];
+        });
+
+        // gabungkan data
+        $merged = $statusesKbn->map(function ($kbn) use ($resultLookup, $statusesAdmin) {
+            $key = $kbn->dn_no . '|' . $kbn->job_no;
+            $res = $resultLookup[$key] ?? null;
+
+            return (object) [
+                // data unik dari KBN
+                'dn_no'        => $kbn->dn_no,
+                'job_no'       => $kbn->job_no,
+                'kbndn_no'     => $kbn->kbndn_no,
+                'check_leader' => $kbn->check_leader,
+                'check_loading'=> $kbn->check_loading,
+                'check_sj'     => $kbn->check_sj,
+
+                // ambil tambahan kolom dari result (jika ada)
+                'cycle'          => $res->cycle ?? null,
+                'customerpart_no'=> $res->customerpart_no ?? null,
+                'qty_pcs'        => $res->qty_pcs ?? null,
+                'QtyPerKbn'      => $res->QtyPerKbn ?? null,
+                'countP'         => $res->countP ?? null,
+                'status_label'   => $res->status_label ?? null,
+                'customer_name'  => $res->customer_name ?? null,
+                'inv_id'         => $res->InvId ?? null,
+                'part_name'      => $res->PartName ?? null,
+                'part_no'        => $res->PartNo ?? null,
+                'tanggal_order'  => $res->tanggal_order ?? null,
+
+                // status admin tetap cek dari $statusesAdmin
+                'status'       => $statusesAdmin[$kbn->dn_no] ?? null,
+            ];
+        });
+
+        Log::debug('dashboard service', [$merged->toArray()]);
+        return $merged;
+    }
+
+    public function dataToday2(array $filters = []){
+        $tables = ['vw_data_hpm', 'vw_data_mmki', 'vw_data_tmmin', 'vw_data_suzuki', 'vw_data_adm', 'vw_data_hino'];
+
+        $baseQuery = null;
+        foreach($tables as $t) {
+            $customerName = $this->customerName[$t];
+            if (!empty($filters['customer']) && $customerName != $filters['customer']) {
+                continue;
+            }
+
+            $query = DB::table($t)
+                ->selectRaw('
+                    tanggal_order,
+                    dn_no,
+                    job_no,
+                    cycle,
+                    customerpart_no,
+                    InvId,
+                    PartName,
+                    PartNo,
+                    qty_pcs,
+                    QtyPerKbn,
+                    countP,
+                    status_label,
+                    ? as customer_name,
+                    NULL as status',
+                    [$customerName]
+                )
+                ->when(!empty($filters['tanggal_order']), function ($query) use ($filters) {
+                    return $query->where('tanggal_order', $filters['tanggal_order']);
+                }, function ($query) {
+                    return $query->where('tanggal_order', Carbon::today()->format('d-m-Y'));
+                })
+                ->when(isset($filters['status_label']), function ($query) use ($filters) {
+                    return $query->where('status_label', $filters['status_label']);
+                });
+
+            if($baseQuery === null) {
+                $baseQuery = $query;
+            } else {
+                $baseQuery->unionAll($query);
+            }
+        }
+
+        $result = $baseQuery->get();
+        $dnNo = $result->pluck('dn_no')->unique()->toArray();
+        $jobNo = $result->pluck('job_no')->unique()->toArray();
+
+        // Get semua data dari tbl_kbndelivery yang sesuai
+        $statusesKbn = DB::table('tbl_kbndelivery')
+            ->select('dn_no', 'kbndn_no', 'job_no', 'check_leader', 'check_loading', 'check_sj')
+            ->whereIn('dn_no', $dnNo)
+            ->whereIn('job_no', $jobNo)
+            ->get();
+
+
+        // Get DN numbers dari tbl_kbndelivery untuk mencari status admin
+        $kbnDnNo = $statusesKbn->pluck('dn_no')->unique()->toArray();
+
+        // Get status dari tb_input_log berdasarkan data yang ada di tbl_kbndelivery
+        $statusesAdmin = DB::table('tb_input_log')
+            ->select('no_dn', 'status')
+            ->whereIn('no_dn', $dnNo)
+        ->pluck('status', 'no_dn');
+
+        // 1️⃣ Group KBN Delivery berdasarkan dn_no + job_no
+        $statusesKbnGrouped = $statusesKbn->groupBy(function ($kbn) {
+            return $kbn->dn_no . '|' . $kbn->job_no;
+        })->map(function ($items) {
+            return (object) [
+                'dn_no'        => $items->first()->dn_no,
+                'job_no'       => $items->first()->job_no,
+                'kbndn_no'     => $items->pluck('kbndn_no')->implode(','), // gabungkan semua kbndn_no
+                'check_leader' => $items->sum('check_leader'),
+                'check_loading'=> $items->sum('check_loading'),
+                'check_sj'     => $items->sum('check_sj'),
+            ];
+        });
+
+        // 2️⃣ Map ke result utama (unik per dn_no + job_no)
+        $merged = $result->groupBy(function ($res) {
+            return $res->dn_no . '|' . $res->job_no;
+        })->map(function ($items) use ($statusesAdmin, $statusesKbnGrouped) {
+            $res = $items->first(); // ambil data utama
+            $key = $res->dn_no . '|' . $res->job_no;
+            $kbn = $statusesKbnGrouped[$key] ?? null;
+
+            return (object) [
+                'tanggal_order'   => $res->tanggal_order,
+                'dn_no'           => $res->dn_no,
+                'job_no'          => $res->job_no,
+                'cycle'           => $res->cycle,
+                'customerpart_no' => $res->customerpart_no,
+                'inv_id'          => $res->InvId,
+                'part_name'       => $res->PartName,
+                'part_no'         => $res->PartNo,
+                'qty_pcs'         => $res->qty_pcs,
+                'QtyPerKbn'       => $res->QtyPerKbn,
+                'countP'          => $res->countP,
+                'status_label'    => $res->status_label,
+                'customer_name'   => $res->customer_name,
+
+                'status_admin'    => $statusesAdmin[$res->dn_no] ?? null,
+
+                // hasil dari penggabungan tbl_kbndelivery
+                'kbndn_no'        => $kbn->kbndn_no ?? null,
+                'check_leader'    => $kbn->check_leader ?? 0,
+                'check_loading'   => $kbn->check_loading ?? 0,
+                'check_sj'        => $kbn->check_sj ?? 0,
+            ];
+        })->values(); // reset index biar rapi
+
+        return $merged;
+
+    }
+
+    public function dataModal (array $filters = [], $request) {
+        $allData = $this->dataToday2($filters);
+        $dataAll = $allData->where('cycle', $request->input('cycle'));
+
+        $mapJob = [
+            'orderChart' => [
+                'column' => 'status_admin',
+                'type' => 'fixed',
+                'actual' => 'OK'
+            ],
+            'prepareChart' => [
+                'column' => 'status_label',
+                'type' => 'fixed',
+                'actual' => 'Close'
+            ],
+            'leaderCheckChart' => [
+                'column' => 'check_leader',
+                'type' => 'countP'
+            ],
+            'loadingChart' => [
+                'column' =>'check_loading',
+                'type' => 'countP'
+            ],
+            'docCheckChart' => [
+                'column' =>'check_sj',
+                'type' => 'countP'
+            ],
+        ];
+
+        if($request->input('kategori') === 'Actual'){
+            $card = $mapJob[$request->input('cardName')];
+            $type = $card['type'];
+            $kolom = $card['column'];
+
+            if($type === 'fixed') {
+                $dataAll = $dataAll->where($card['column'], $card['actual']);
+            } else if($type === 'countP') {
+                $dataAll = $dataAll->filter(function ($row) use ($kolom) {
+                    return $row->$kolom == $row->countP;
+                });
+            }
+        }
+
+        return $dataAll;
+
+    }
+}
+?>
