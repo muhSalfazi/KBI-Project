@@ -1,0 +1,121 @@
+[19-Aug-2025 07:39:29 UTC] PHP Warning:  Undefined variable $ResultQueryListMaterials in /home/jajaleun/public_html/delivery.jajaleun.com/MVC/pages/masterpart_hpm.php on line 126
+[19-Aug-2025 07:39:29 UTC] PHP Warning:  Trying to access array offset on null in /home/jajaleun/public_html/delivery.jajaleun.com/MVC/pages/masterpart_hpm.php on line 126
+[19-Aug-2025 07:42:22 UTC] PHP Warning:  Undefined variable $ResultQueryListMaterials in /home/jajaleun/public_html/delivery.jajaleun.com/MVC/pages/masterpart_hpm.php on line 126
+[19-Aug-2025 07:42:22 UTC] PHP Warning:  Trying to access array offset on null in /home/jajaleun/public_html/delivery.jajaleun.com/MVC/pages/masterpart_hpm.php on line 126
+[19-Aug-2025 08:23:03 UTC] PHP Warning:  Undefined variable $ResultQueryListMaterials in /home/jajaleun/public_html/delivery.jajaleun.com/MVC/pages/masterpart_hpm.php on line 126
+[19-Aug-2025 08:23:03 UTC] PHP Warning:  Trying to access array offset on null in /home/jajaleun/public_html/delivery.jajaleun.com/MVC/pages/masterpart_hpm.php on line 126
+[19-Aug-2025 08:32:37 UTC] PHP Warning:  Undefined array key "id_user" in /home/jajaleun/public_html/delivery.jajaleun.com/MVC/pages/delivery_hpm.php on line 13
+[19-Aug-2025 08:49:01 UTC] PHP Warning:  Undefined variable $ResultQueryListMaterials in /home/jajaleun/public_html/delivery.jajaleun.com/MVC/pages/masterpart_hpm.php on line 126
+[19-Aug-2025 08:49:01 UTC] PHP Warning:  Trying to access array offset on null in /home/jajaleun/public_html/delivery.jajaleun.com/MVC/pages/masterpart_hpm.php on line 126
+[19-Aug-2025 13:26:04 UTC] PHP Warning:  Undefined array key "id_user" in /home/jajaleun/public_html/delivery.jajaleun.com/MVC/pages/masterpart_hpm.php on line 11
+[19-Aug-2025 13:26:04 UTC] PHP Warning:  Undefined variable $ResultQueryListMaterials in /home/jajaleun/public_html/delivery.jajaleun.com/MVC/pages/masterpart_hpm.php on line 126
+[19-Aug-2025 13:26:04 UTC] PHP Warning:  Trying to access array offset on null in /home/jajaleun/public_html/delivery.jajaleun.com/MVC/pages/masterpart_hpm.php on line 126
+[20-Aug-2025 00:16:44 UTC] PHP Warning:  Undefined variable $ResultQueryListMaterials in /home/jajaleun/public_html/delivery.jajaleun.com/MVC/pages/masterpart_hpm.php on line 126
+[20-Aug-2025 00:16:44 UTC] PHP Warning:  Trying to access array offset on null in /home/jajaleun/public_html/delivery.jajaleun.com/MVC/pages/masterpart_hpm.php on line 126
+[20-Aug-2025 00:19:39 UTC] PHP Warning:  Undefined variable $ResultQueryListMaterials in /home/jajaleun/public_html/delivery.jajaleun.com/MVC/pages/masterpart_hpm.php on line 126
+[20-Aug-2025 00:19:39 UTC] PHP Warning:  Trying to access array offset on null in /home/jajaleun/public_html/delivery.jajaleun.com/MVC/pages/masterpart_hpm.php on line 126
+[20-Aug-2025 02:57:56 UTC] PHP Warning:  Undefined array key "id_user" in /home/jajaleun/public_html/delivery.jajaleun.com/MVC/pages/delivery_hpm.php on line 13
+[20-Aug-2025 07:57:42 UTC] PHP Warning:  Undefined variable $ResultQueryListMaterials in /home/jajaleun/public_html/delivery.jajaleun.com/MVC/pages/masterpart_hpm.php on line 126
+[20-Aug-2025 07:57:42 UTC] PHP Warning:  Trying to access array offset on null in /home/jajaleun/public_html/delivery.jajaleun.com/MVC/pages/masterpart_hpm.php on line 126
+[21-Aug-2025 02:41:19 UTC] PHP Warning:  Undefined variable $ResultQueryListMaterials in /home/jajaleun/public_html/delivery.jajaleun.com/MVC/pages/masterpart_hpm.php on line 126
+[21-Aug-2025 02:41:19 UTC] PHP Warning:  Trying to access array offset on null in /home/jajaleun/public_html/delivery.jajaleun.com/MVC/pages/masterpart_hpm.php on line 126
+[22-Aug-2025 00:04:39 UTC] PHP Warning:  Undefined variable $ResultQueryListMaterials in /home/jajaleun/public_html/delivery.jajaleun.com/MVC/pages/masterpart_hpm.php on line 126
+[22-Aug-2025 00:04:39 UTC] PHP Warning:  Trying to access array offset on null in /home/jajaleun/public_html/delivery.jajaleun.com/MVC/pages/masterpart_hpm.php on line 126
+[22-Aug-2025 00:43:44 UTC] PHP Warning:  Undefined variable $ResultQueryListMaterials in /home/jajaleun/public_html/delivery.jajaleun.com/MVC/pages/masterpart_hpm.php on line 126
+[22-Aug-2025 00:43:44 UTC] PHP Warning:  Trying to access array offset on null in /home/jajaleun/public_html/delivery.jajaleun.com/MVC/pages/masterpart_hpm.php on line 126
+[22-Aug-2025 00:51:38 UTC] PHP Warning:  Undefined array key "id_user" in /home/jajaleun/public_html/delivery.jajaleun.com/MVC/pages/masterpart_hpm.php on line 11
+[22-Aug-2025 00:51:38 UTC] PHP Warning:  Undefined variable $ResultQueryListMaterials in /home/jajaleun/public_html/delivery.jajaleun.com/MVC/pages/masterpart_hpm.php on line 126
+[22-Aug-2025 00:51:38 UTC] PHP Warning:  Trying to access array offset on null in /home/jajaleun/public_html/delivery.jajaleun.com/MVC/pages/masterpart_hpm.php on line 126
+[22-Aug-2025 00:51:47 UTC] PHP Warning:  Undefined variable $ResultQueryListMaterials in /home/jajaleun/public_html/delivery.jajaleun.com/MVC/pages/masterpart_hpm.php on line 126
+[22-Aug-2025 00:51:47 UTC] PHP Warning:  Trying to access array offset on null in /home/jajaleun/public_html/delivery.jajaleun.com/MVC/pages/masterpart_hpm.php on line 126
+[22-Aug-2025 01:22:00 UTC] PHP Warning:  Undefined array key "id_user" in /home/jajaleun/public_html/delivery.jajaleun.com/MVC/pages/delivery_hpm.php on line 13
+[22-Aug-2025 02:02:23 UTC] PHP Warning:  Undefined variable $ResultQueryListMaterials in /home/jajaleun/public_html/delivery.jajaleun.com/MVC/pages/masterpart_hino.php on line 126
+[22-Aug-2025 02:02:23 UTC] PHP Warning:  Trying to access array offset on null in /home/jajaleun/public_html/delivery.jajaleun.com/MVC/pages/masterpart_hino.php on line 126
+[22-Aug-2025 02:02:23 UTC] PHP Warning:  Undefined variable $ResultQueryListMaterials in /home/jajaleun/public_html/delivery.jajaleun.com/MVC/pages/masterpart_hpm.php on line 126
+[22-Aug-2025 02:02:23 UTC] PHP Warning:  Trying to access array offset on null in /home/jajaleun/public_html/delivery.jajaleun.com/MVC/pages/masterpart_hpm.php on line 126
+[22-Aug-2025 03:02:24 UTC] PHP Warning:  Undefined array key "id_user" in /home/jajaleun/public_html/delivery.jajaleun.com/MVC/pages/delivery_hpm.php on line 13
+[22-Aug-2025 03:24:10 UTC] PHP Warning:  Undefined array key "id_user" in /home/jajaleun/public_html/delivery.jajaleun.com/MVC/pages/masterpart_hpm.php on line 11
+[22-Aug-2025 03:24:10 UTC] PHP Warning:  Undefined variable $ResultQueryListMaterials in /home/jajaleun/public_html/delivery.jajaleun.com/MVC/pages/masterpart_hpm.php on line 126
+[22-Aug-2025 03:24:10 UTC] PHP Warning:  Trying to access array offset on null in /home/jajaleun/public_html/delivery.jajaleun.com/MVC/pages/masterpart_hpm.php on line 126
+[22-Aug-2025 03:33:56 UTC] PHP Warning:  Undefined variable $ResultQueryListMaterials in /home/jajaleun/public_html/delivery.jajaleun.com/MVC/pages/masterpart_hpm.php on line 126
+[22-Aug-2025 03:33:56 UTC] PHP Warning:  Trying to access array offset on null in /home/jajaleun/public_html/delivery.jajaleun.com/MVC/pages/masterpart_hpm.php on line 126
+[25-Aug-2025 08:19:24 UTC] PHP Warning:  Undefined variable $ResultQueryListMaterials in /home/jajaleun/public_html/delivery.jajaleun.com/MVC/pages/masterpart_hpm.php on line 126
+[25-Aug-2025 08:19:24 UTC] PHP Warning:  Trying to access array offset on null in /home/jajaleun/public_html/delivery.jajaleun.com/MVC/pages/masterpart_hpm.php on line 126
+[26-Aug-2025 06:43:48 UTC] PHP Warning:  Undefined variable $ResultQueryListMaterials in /home/jajaleun/public_html/delivery.jajaleun.com/MVC/pages/masterpart_hpm.php on line 126
+[26-Aug-2025 06:43:48 UTC] PHP Warning:  Trying to access array offset on null in /home/jajaleun/public_html/delivery.jajaleun.com/MVC/pages/masterpart_hpm.php on line 126
+[27-Aug-2025 00:43:26 UTC] PHP Warning:  Undefined array key "id_user" in /home/jajaleun/public_html/delivery.jajaleun.com/MVC/pages/masterpart_hpm.php on line 11
+[27-Aug-2025 00:43:26 UTC] PHP Warning:  Undefined variable $ResultQueryListMaterials in /home/jajaleun/public_html/delivery.jajaleun.com/MVC/pages/masterpart_hpm.php on line 126
+[27-Aug-2025 00:43:26 UTC] PHP Warning:  Trying to access array offset on null in /home/jajaleun/public_html/delivery.jajaleun.com/MVC/pages/masterpart_hpm.php on line 126
+[27-Aug-2025 03:41:49 UTC] PHP Warning:  Undefined variable $ResultQueryListMaterials in /home/jajaleun/public_html/delivery.jajaleun.com/MVC/pages/masterpart_tmmin.php on line 126
+[27-Aug-2025 03:41:49 UTC] PHP Warning:  Trying to access array offset on null in /home/jajaleun/public_html/delivery.jajaleun.com/MVC/pages/masterpart_tmmin.php on line 126
+[27-Aug-2025 03:42:54 UTC] PHP Warning:  Undefined variable $ResultQueryListMaterials in /home/jajaleun/public_html/delivery.jajaleun.com/MVC/pages/masterpart_tmmin.php on line 126
+[27-Aug-2025 03:42:54 UTC] PHP Warning:  Trying to access array offset on null in /home/jajaleun/public_html/delivery.jajaleun.com/MVC/pages/masterpart_tmmin.php on line 126
+[27-Aug-2025 03:43:01 UTC] PHP Warning:  Undefined variable $ResultQueryListMaterials in /home/jajaleun/public_html/delivery.jajaleun.com/MVC/pages/masterpart_tmmin.php on line 126
+[27-Aug-2025 03:43:01 UTC] PHP Warning:  Trying to access array offset on null in /home/jajaleun/public_html/delivery.jajaleun.com/MVC/pages/masterpart_tmmin.php on line 126
+[27-Aug-2025 03:43:02 UTC] PHP Warning:  Undefined variable $ResultQueryListMaterials in /home/jajaleun/public_html/delivery.jajaleun.com/MVC/pages/masterpart_tmmin.php on line 126
+[27-Aug-2025 03:43:02 UTC] PHP Warning:  Trying to access array offset on null in /home/jajaleun/public_html/delivery.jajaleun.com/MVC/pages/masterpart_tmmin.php on line 126
+[27-Aug-2025 03:43:03 UTC] PHP Warning:  Undefined variable $ResultQueryListMaterials in /home/jajaleun/public_html/delivery.jajaleun.com/MVC/pages/masterpart_tmmin.php on line 126
+[27-Aug-2025 03:43:03 UTC] PHP Warning:  Trying to access array offset on null in /home/jajaleun/public_html/delivery.jajaleun.com/MVC/pages/masterpart_tmmin.php on line 126
+[27-Aug-2025 03:43:03 UTC] PHP Warning:  Undefined variable $ResultQueryListMaterials in /home/jajaleun/public_html/delivery.jajaleun.com/MVC/pages/masterpart_tmmin.php on line 126
+[27-Aug-2025 03:43:03 UTC] PHP Warning:  Trying to access array offset on null in /home/jajaleun/public_html/delivery.jajaleun.com/MVC/pages/masterpart_tmmin.php on line 126
+[27-Aug-2025 03:43:04 UTC] PHP Warning:  Undefined variable $ResultQueryListMaterials in /home/jajaleun/public_html/delivery.jajaleun.com/MVC/pages/masterpart_tmmin.php on line 126
+[27-Aug-2025 03:43:04 UTC] PHP Warning:  Trying to access array offset on null in /home/jajaleun/public_html/delivery.jajaleun.com/MVC/pages/masterpart_tmmin.php on line 126
+[27-Aug-2025 03:43:14 UTC] PHP Warning:  Undefined variable $ResultQueryListMaterials in /home/jajaleun/public_html/delivery.jajaleun.com/MVC/pages/masterpart_tmmin.php on line 126
+[27-Aug-2025 03:43:14 UTC] PHP Warning:  Trying to access array offset on null in /home/jajaleun/public_html/delivery.jajaleun.com/MVC/pages/masterpart_tmmin.php on line 126
+[27-Aug-2025 03:49:21 UTC] PHP Warning:  Undefined variable $ResultQueryListMaterials in /home/jajaleun/public_html/delivery.jajaleun.com/MVC/pages/masterpart_hpm.php on line 126
+[27-Aug-2025 03:49:21 UTC] PHP Warning:  Trying to access array offset on null in /home/jajaleun/public_html/delivery.jajaleun.com/MVC/pages/masterpart_hpm.php on line 126
+[27-Aug-2025 04:15:24 UTC] PHP Warning:  Undefined array key "id_user" in /home/jajaleun/public_html/delivery.jajaleun.com/MVC/pages/delivery_tmmin.php on line 13
+[27-Aug-2025 04:15:40 UTC] PHP Warning:  Undefined variable $ResultQueryListMaterials in /home/jajaleun/public_html/delivery.jajaleun.com/MVC/pages/masterpart_tmmin.php on line 126
+[27-Aug-2025 04:15:40 UTC] PHP Warning:  Trying to access array offset on null in /home/jajaleun/public_html/delivery.jajaleun.com/MVC/pages/masterpart_tmmin.php on line 126
+[27-Aug-2025 04:17:48 UTC] PHP Warning:  Undefined variable $ResultQueryListMaterials in /home/jajaleun/public_html/delivery.jajaleun.com/MVC/pages/masterpart_hpm.php on line 126
+[27-Aug-2025 04:17:48 UTC] PHP Warning:  Trying to access array offset on null in /home/jajaleun/public_html/delivery.jajaleun.com/MVC/pages/masterpart_hpm.php on line 126
+[27-Aug-2025 04:20:26 UTC] PHP Warning:  Undefined variable $ResultQueryListMaterials in /home/jajaleun/public_html/delivery.jajaleun.com/MVC/pages/masterpart_tmmin.php on line 126
+[27-Aug-2025 04:20:26 UTC] PHP Warning:  Trying to access array offset on null in /home/jajaleun/public_html/delivery.jajaleun.com/MVC/pages/masterpart_tmmin.php on line 126
+[27-Aug-2025 04:23:08 UTC] PHP Warning:  Undefined variable $ResultQueryListMaterials in /home/jajaleun/public_html/delivery.jajaleun.com/MVC/pages/masterpart_hpm.php on line 126
+[27-Aug-2025 04:23:08 UTC] PHP Warning:  Trying to access array offset on null in /home/jajaleun/public_html/delivery.jajaleun.com/MVC/pages/masterpart_hpm.php on line 126
+[27-Aug-2025 04:25:21 UTC] PHP Warning:  Undefined variable $ResultQueryListMaterials in /home/jajaleun/public_html/delivery.jajaleun.com/MVC/pages/masterpart_hino.php on line 126
+[27-Aug-2025 04:25:21 UTC] PHP Warning:  Trying to access array offset on null in /home/jajaleun/public_html/delivery.jajaleun.com/MVC/pages/masterpart_hino.php on line 126
+[27-Aug-2025 04:26:05 UTC] PHP Warning:  Undefined variable $ResultQueryListMaterials in /home/jajaleun/public_html/delivery.jajaleun.com/MVC/pages/masterpart_hino.php on line 126
+[27-Aug-2025 04:26:05 UTC] PHP Warning:  Trying to access array offset on null in /home/jajaleun/public_html/delivery.jajaleun.com/MVC/pages/masterpart_hino.php on line 126
+[27-Aug-2025 04:26:10 UTC] PHP Warning:  Undefined variable $ResultQueryListMaterials in /home/jajaleun/public_html/delivery.jajaleun.com/MVC/pages/masterpart_hino.php on line 126
+[27-Aug-2025 04:26:10 UTC] PHP Warning:  Trying to access array offset on null in /home/jajaleun/public_html/delivery.jajaleun.com/MVC/pages/masterpart_hino.php on line 126
+[27-Aug-2025 06:13:10 UTC] PHP Warning:  Undefined variable $ResultQueryListMaterials in /home/jajaleun/public_html/delivery.jajaleun.com/MVC/pages/masterpart_tmmin.php on line 126
+[27-Aug-2025 06:13:10 UTC] PHP Warning:  Trying to access array offset on null in /home/jajaleun/public_html/delivery.jajaleun.com/MVC/pages/masterpart_tmmin.php on line 126
+[27-Aug-2025 07:53:25 UTC] PHP Warning:  Undefined variable $ResultQueryListMaterials in /home/jajaleun/public_html/delivery.jajaleun.com/MVC/pages/masterpart_tmmin.php on line 126
+[27-Aug-2025 07:53:25 UTC] PHP Warning:  Trying to access array offset on null in /home/jajaleun/public_html/delivery.jajaleun.com/MVC/pages/masterpart_tmmin.php on line 126
+[27-Aug-2025 07:58:51 UTC] PHP Warning:  Undefined variable $ResultQueryListMaterials in /home/jajaleun/public_html/delivery.jajaleun.com/MVC/pages/masterpart_hpm.php on line 126
+[27-Aug-2025 07:58:51 UTC] PHP Warning:  Trying to access array offset on null in /home/jajaleun/public_html/delivery.jajaleun.com/MVC/pages/masterpart_hpm.php on line 126
+[28-Aug-2025 00:30:38 UTC] PHP Warning:  Undefined array key "id_user" in /home/jajaleun/public_html/delivery.jajaleun.com/MVC/pages/delivery_hpm.php on line 13
+[28-Aug-2025 08:05:24 UTC] PHP Warning:  Undefined array key "id_user" in /home/jajaleun/public_html/delivery.jajaleun.com/MVC/pages/delivery_hpm.php on line 13
+[28-Aug-2025 08:05:28 UTC] PHP Warning:  Undefined array key "id_user" in /home/jajaleun/public_html/delivery.jajaleun.com/MVC/pages/delivery_hpm.php on line 13
+[28-Aug-2025 08:48:50 UTC] PHP Warning:  Trying to access array offset on null in /home/jajaleun/public_html/delivery.jajaleun.com/MVC/pages/User.php on line 188
+[02-Sep-2025 01:18:01 UTC] PHP Warning:  Undefined array key "id_user" in /home/jajaleun/public_html/delivery.jajaleun.com/MVC/pages/masterpart_hpm.php on line 11
+[02-Sep-2025 01:18:01 UTC] PHP Warning:  Undefined variable $ResultQueryListMaterials in /home/jajaleun/public_html/delivery.jajaleun.com/MVC/pages/masterpart_hpm.php on line 126
+[02-Sep-2025 01:18:01 UTC] PHP Warning:  Trying to access array offset on null in /home/jajaleun/public_html/delivery.jajaleun.com/MVC/pages/masterpart_hpm.php on line 126
+[02-Sep-2025 08:11:24 UTC] PHP Warning:  Undefined variable $ResultQueryListMaterials in /home/jajaleun/public_html/delivery.jajaleun.com/MVC/pages/masterpart_hpm.php on line 126
+[02-Sep-2025 08:11:24 UTC] PHP Warning:  Trying to access array offset on null in /home/jajaleun/public_html/delivery.jajaleun.com/MVC/pages/masterpart_hpm.php on line 126
+[03-Sep-2025 22:00:48 UTC] PHP Warning:  Undefined variable $ResultQueryListMaterials in /home/jajaleun/public_html/delivery.jajaleun.com/MVC/pages/masterpart_hpm.php on line 126
+[03-Sep-2025 22:00:48 UTC] PHP Warning:  Trying to access array offset on null in /home/jajaleun/public_html/delivery.jajaleun.com/MVC/pages/masterpart_hpm.php on line 126
+[03-Sep-2025 22:00:53 UTC] PHP Warning:  Undefined array key "id_user" in /home/jajaleun/public_html/delivery.jajaleun.com/MVC/pages/masterpart_hpm.php on line 11
+[03-Sep-2025 22:00:53 UTC] PHP Warning:  Undefined variable $ResultQueryListMaterials in /home/jajaleun/public_html/delivery.jajaleun.com/MVC/pages/masterpart_hpm.php on line 126
+[03-Sep-2025 22:00:53 UTC] PHP Warning:  Trying to access array offset on null in /home/jajaleun/public_html/delivery.jajaleun.com/MVC/pages/masterpart_hpm.php on line 126
+[03-Sep-2025 22:00:54 UTC] PHP Warning:  Undefined array key "id_user" in /home/jajaleun/public_html/delivery.jajaleun.com/MVC/pages/masterpart_hpm.php on line 11
+[03-Sep-2025 22:00:54 UTC] PHP Warning:  Undefined variable $ResultQueryListMaterials in /home/jajaleun/public_html/delivery.jajaleun.com/MVC/pages/masterpart_hpm.php on line 126
+[03-Sep-2025 22:00:54 UTC] PHP Warning:  Trying to access array offset on null in /home/jajaleun/public_html/delivery.jajaleun.com/MVC/pages/masterpart_hpm.php on line 126
+[03-Sep-2025 22:00:54 UTC] PHP Warning:  Undefined array key "id_user" in /home/jajaleun/public_html/delivery.jajaleun.com/MVC/pages/masterpart_hpm.php on line 11
+[03-Sep-2025 22:00:54 UTC] PHP Warning:  Undefined variable $ResultQueryListMaterials in /home/jajaleun/public_html/delivery.jajaleun.com/MVC/pages/masterpart_hpm.php on line 126
+[03-Sep-2025 22:00:54 UTC] PHP Warning:  Trying to access array offset on null in /home/jajaleun/public_html/delivery.jajaleun.com/MVC/pages/masterpart_hpm.php on line 126
+[04-Sep-2025 06:40:42 UTC] PHP Warning:  Undefined variable $ResultQueryListMaterials in /home/jajaleun/public_html/delivery.jajaleun.com/MVC/pages/masterpart_hino.php on line 126
+[04-Sep-2025 06:40:42 UTC] PHP Warning:  Trying to access array offset on null in /home/jajaleun/public_html/delivery.jajaleun.com/MVC/pages/masterpart_hino.php on line 126
+[04-Sep-2025 06:44:17 UTC] PHP Warning:  Undefined variable $ResultQueryListMaterials in /home/jajaleun/public_html/delivery.jajaleun.com/MVC/pages/masterpart_hpm.php on line 126
+[04-Sep-2025 06:44:17 UTC] PHP Warning:  Trying to access array offset on null in /home/jajaleun/public_html/delivery.jajaleun.com/MVC/pages/masterpart_hpm.php on line 126
+[08-Sep-2025 01:28:49 UTC] PHP Warning:  Undefined variable $ResultQueryListMaterials in /home/jajaleun/public_html/delivery.jajaleun.com/MVC/pages/masterpart_hpm.php on line 126
+[08-Sep-2025 01:28:49 UTC] PHP Warning:  Trying to access array offset on null in /home/jajaleun/public_html/delivery.jajaleun.com/MVC/pages/masterpart_hpm.php on line 126
+[08-Sep-2025 01:43:56 UTC] PHP Warning:  Trying to access array offset on null in /home/jajaleun/public_html/delivery.jajaleun.com/MVC/pages/User.php on line 188
+[11-Sep-2025 00:33:43 UTC] PHP Warning:  Trying to access array offset on null in /home/jajaleun/public_html/delivery.jajaleun.com/MVC/pages/User.php on line 188
+[11-Sep-2025 00:34:15 UTC] PHP Warning:  Trying to access array offset on null in /home/jajaleun/public_html/delivery.jajaleun.com/MVC/pages/User.php on line 188
+[11-Sep-2025 00:34:19 UTC] PHP Warning:  Trying to access array offset on null in /home/jajaleun/public_html/delivery.jajaleun.com/MVC/pages/User.php on line 188
+[11-Sep-2025 05:34:49 UTC] PHP Warning:  Trying to access array offset on null in /home/jajaleun/public_html/delivery.jajaleun.com/MVC/pages/User.php on line 188
+[11-Sep-2025 05:35:27 UTC] PHP Warning:  Trying to access array offset on null in /home/jajaleun/public_html/delivery.jajaleun.com/MVC/pages/User.php on line 188
+[11-Sep-2025 05:36:44 UTC] PHP Warning:  Trying to access array offset on null in /home/jajaleun/public_html/delivery.jajaleun.com/MVC/pages/User.php on line 188
+[18-Sep-2025 06:49:02 UTC] PHP Warning:  Undefined array key "id_user" in /home/jajaleun/public_html/delivery.jajaleun.com/MVC/pages/delivery_hpm.php on line 13

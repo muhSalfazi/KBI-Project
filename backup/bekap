@@ -1,0 +1,213 @@
+<?php
+// Bagian ini seharusnya ada di awal file dashboard.php Anda
+$ds = DIRECTORY_SEPARATOR;
+$base_dir = realpath(dirname(__FILE__)  . $ds . '..') . $ds;
+include_once("../connection.php"); // Pastikan koneksi database sudah ada
+session_start();
+// require_once("{$base_dir}pages{$ds}validate{$ds}AuthUser.php"); // Pastikan user sudah login
+
+require_once("{$base_dir}pages{$ds}core{$ds}header.php"); // Sertakan header
+require_once("{$base_dir}pages{$ds}core{$ds}sidebar.php"); // Sertakan sidebar
+
+$current_date_mysql = date('Y-m-d'); // Format YYYY-MM-DD untuk CURDATE()
+$current_date_ddmmyyyy = date('d-m-Y'); // Format DD-MM-YYYY untuk kolom tanggal_order
+
+// --- 1. Total Delivery Hari Ini (Status: Close) ---
+// Ini akan menghitung jumlah BARIS/TRANSAKSI delivery yang closed hari ini
+$queryTotalDeliveryHariIni = "SELECT COUNT(*) as total_delivery
+                              FROM tbl_deliveryadm
+                              WHERE status = 'Close' AND STR_TO_DATE(tanggal_order, '%d-%m-%Y') = CURDATE();";
+$resultTotalDeliveryHariIni = mysqli_query($mysqli, $queryTotalDeliveryHariIni);
+$totalDeliveryHariIni = 0;
+if ($resultTotalDeliveryHariIni && mysqli_num_rows($resultTotalDeliveryHariIni) > 0) {
+    $row = mysqli_fetch_assoc($resultTotalDeliveryHariIni);
+    $totalDeliveryHariIni = $row['total_delivery'];
+}
+
+// --- 2. Jumlah Box & Qty Terkirim (Asumsi: SUM qty_box dan SUM qty_pcs untuk status Close hari ini) ---
+// Anda mungkin punya kolom qty_box dan qty_pcs. Saya akan menjumlahkan keduanya sebagai "QTY Terkirim"
+// Jika QTY Terkirim hanya berarti qty_pcs, maka SUM(qty_pcs) saja.
+// Jika itu adalah kombinasi qty_box dan qty_pcs, ini perlu diklarifikasi lebih lanjut.
+// Untuk contoh ini, saya akan SUM qty_pcs. Anda bisa menambahkan SUM(qty_box) juga jika perlu.
+$queryQtyTerkirim = "SELECT SUM(qty_pcs) as total_qty_terkirim, SUM(qty_box) as total_box_terkirim
+                     FROM tbl_deliveryadm
+                     WHERE status = 'Close' AND STR_TO_DATE(tanggal_order, '%d-%m-%Y') = CURDATE();";
+$resultQtyTerkirim = mysqli_query($mysqli, $queryQtyTerkirim);
+$totalQtyTerkirim = 0;
+$totalBoxTerkirim = 0;
+if ($resultQtyTerkirim && mysqli_num_rows($resultQtyTerkirim) > 0) {
+    $row = mysqli_fetch_assoc($resultQtyTerkirim);
+    $totalQtyTerkirim = $row['total_qty_terkirim'] ?? 0;
+    $totalBoxTerkirim = $row['total_box_terkirim'] ?? 0;
+}
+$jumlahBoxQtyTerkirim = $totalBoxTerkirim . " Box & " . $totalQtyTerkirim . " Qty Terkirim"; // Contoh format
+
+// --- 3. Status On-Time Delivery (%) ---
+// Ini perlu data delivery yang On-Time dan Total delivery yang seharusnya diselesaikan
+// Asumsi: Anda punya kolom 'on_time_status' (misal 'On-Time', 'Late') dan 'status' (misal 'Close', 'Open')
+// Atau, jika On-Time ditentukan dari tanggal_delivery vs tanggal_target.
+// Untuk contoh ini, saya akan asumsikan ada kolom 'is_on_time' (1/0 atau TRUE/FALSE)
+// ATAU kita bandingkan tanggal_order dengan tanggal_delivery atau tanggal_actual_delivery
+// Mari kita buat perhitungan sederhana: (Jumlah On-Time / Total Closed) * 100
+$queryTotalClosed = "SELECT COUNT(*) as total_closed_delivery
+                     FROM tbl_deliveryadm
+                     WHERE status = 'Close' AND STR_TO_DATE(tanggal_order, '%d-%m-%Y') = CURDATE();";
+$resultTotalClosed = mysqli_query($mysqli, $queryTotalClosed);
+$totalClosedDelivery = 0;
+if ($resultTotalClosed && mysqli_num_rows($resultTotalClosed) > 0) {
+    $row = mysqli_fetch_assoc($resultTotalClosed);
+    $totalClosedDelivery = $row['total_closed_delivery'];
+}
+
+// Asumsi: ada kolom 'is_on_time' yang bernilai 1 jika on time, 0 jika tidak.
+// ATAU, kolom tanggal_actual_delivery.
+// Untuk kepraktisan, mari asumsikan kita punya cara untuk mengidentifikasi 'On-Time'
+// Misalnya, jika tanggal_order sama dengan tanggal_actual_delivery (jika ada kolom tersebut)
+$queryOnTimeDelivery = "SELECT COUNT(*) as total_on_time
+                        FROM tbl_deliveryadm
+                        WHERE status = 'Close' AND STR_TO_DATE(tanggal_order, '%d-%m-%Y') = CURDATE()
+                        AND (tanggal_actual_delivery IS NULL OR STR_TO_DATE(tanggal_actual_delivery, '%d-%m-%Y') <= STR_TO_DATE(tanggal_order, '%d-%m-%Y'));"; // Ini contoh logik on-time
+// Catatan: Logik on-time ini sangat sederhana dan perlu disesuaikan dengan aturan bisnis Anda.
+// Seringkali on-time melibatkan tanggal target dibandingkan dengan tanggal aktual.
+$resultOnTimeDelivery = mysqli_query($mysqli, $queryOnTimeDelivery);
+$totalOnTimeDelivery = 0;
+if ($resultOnTimeDelivery && mysqli_num_rows($resultOnTimeDelivery) > 0) {
+    $row = mysqli_fetch_assoc($resultOnTimeDelivery);
+    $totalOnTimeDelivery = $row['total_on_time'];
+}
+
+$statusOnTimeDelivery = 0;
+if ($totalClosedDelivery > 0) {
+    $statusOnTimeDelivery = round(($totalOnTimeDelivery / $totalClosedDelivery) * 100);
+}
+?>
+
+<div class="container-fluid"> <h2 class="page-header">OVERVIEW DELIVERY DASHBOARD</h2>
+
+    <div class="row">
+        <div class="col-md-4">
+            <div class="statistic-box blue">
+                <div class="statistic-number"><?= $totalDeliveryHariIni ?></div>
+                <div class="statistic-label">Total Delivery Hari Ini</div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="statistic-box purple">
+                <div class="statistic-number"><?= $jumlahBoxQtyTerkirim ?></div>
+                <div class="statistic-label">Jumlah Box & Qty Terkirim</div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="statistic-box green">
+                <div class="statistic-number"><?= $statusOnTimeDelivery ?>%</div>
+                <div class="statistic-label">Status On-Time Delivery</div>
+            </div>
+        </div>
+    </div> <div class="row">
+        <div class="col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Manifest Open vs Close Per Tanggal / Vendor</h3>
+                </div>
+                <div class="panel-body">
+                    <canvas id="manifestChart"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Volume by Plant / Vendor</h3>
+                </div>
+                <div class="panel-body">
+                    <canvas id="volumeChart"></canvas>
+                </div>
+            </div>
+        </div>
+    <!-- </div> <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Top Concerns</h3>
+                </div>
+                <div class="panel-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>No.</th>
+                                    <th>No DN</th>
+                                    <th>Job No</th>
+                                    <th>Customer Part</th>
+                                    <th>Plant</th>
+                                    <th>Qty Box</th>
+                                    <th>Qty Scan</th>
+                                    <th>Date Input</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php
+                                // Ambil data Top Concerns
+                                // Asumsi: ada kolom 'concern_type', 'no_dn', 'job_no', 'customer_part', 'plant', 'qty_box', 'qty_scan', 'date_input'
+                                // Dan kamu ingin menampilkan 3 data teratas atau berdasarkan kondisi tertentu.
+                                // Contoh sederhana untuk 3 baris data statis seperti di gambar:
+                                $topConcerns = [
+                                    ['No' => 1, 'NoDN' => '20364287', 'JobNo' => '2604', 'CustomerPart' => '92117VV4410P', 'Plant' => '3R24', 'QtyBox' => 9, 'QtyScan' => 1, 'DateInput' => '19-Mei-2025'],
+                                    ['No' => 2, 'NoDN' => '200H2', 'JobNo' => '2603', 'CustomerPart' => '92116VV130P', 'Plant' => '3R24', 'QtyBox' => 9, 'QtyScan' => 2, 'DateInput' => '19-Mei-2025'],
+                                    ['No' => 3, 'NoDN' => '95012TVIC', 'JobNo' => '2607', 'CustomerPart' => '95012TV0110', 'Plant' => '3R24', 'QtyBox' => 17, 'QtyScan' => 15, 'DateInput' => '18-Mei-2025'],
+                                ];
+
+                                // Jika kamu ingin mengambil dari database, contoh query:
+                                /*
+                                $queryTopConcerns = "SELECT no_dn, job_no, customer_part, plant, qty_box, qty_scan, tanggal_input
+                                                     FROM tbl_deliveryadm
+                                                     WHERE status != 'Close' OR qty_box != qty_scan -- Contoh kondisi concern
+                                                     ORDER BY tanggal_order DESC
+                                                     LIMIT 5;"; // Ambil 5 data teratas
+                                $resultTopConcerns = mysqli_query($mysqli, $queryTopConcerns);
+                                $rowNum = 1;
+                                if ($resultTopConcerns) {
+                                    while ($row = mysqli_fetch_assoc($resultTopConcerns)) {
+                                        echo "<tr>";
+                                        echo "<td>" . $rowNum++ . "</td>";
+                                        echo "<td>" . $row['no_dn'] . "</td>";
+                                        echo "<td>" . $row['job_no'] . "</td>";
+                                        echo "<td>" . $row['customer_part'] . "</td>";
+                                        echo "<td>" . $row['plant'] . "</td>";
+                                        echo "<td>" . $row['qty_box'] . "</td>";
+                                        echo "<td>" . $row['qty_scan'] . "</td>";
+                                        echo "<td>" . date('d-M-Y', strtotime(str_replace('-', '/', $row['tanggal_input']))) . "</td>"; // Sesuaikan format tanggal_input
+                                        echo '<td><a href="#" class="btn btn-primary btn-xs">Investigate</a></td>';
+                                        echo "</tr>";
+                                    }
+                                }
+                                */
+
+                                // Loop untuk data statis (ubah ini ke query database jika sudah siap)
+                                foreach ($topConcerns as $index => $concern) {
+                                    echo "<tr>";
+                                    echo "<td>" . ($index + 1) . "</td>";
+                                    echo "<td>" . $concern['NoDN'] . "</td>";
+                                    echo "<td>" . $concern['JobNo'] . "</td>";
+                                    echo "<td>" . $concern['CustomerPart'] . "</td>";
+                                    echo "<td>" . $concern['Plant'] . "</td>";
+                                    echo "<td>" . $concern['QtyBox'] . "</td>";
+                                    echo "<td>" . $concern['QtyScan'] . "</td>";
+                                    echo "<td>" . $concern['DateInput'] . "</td>";
+                                    echo '<td><a href="#" class="btn btn-primary btn-xs">Investigate</a></td>';
+                                    echo "</tr>";
+                                }
+                                ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>  -->
+</div> <?php
+require_once("{$base_dir}pages{$ds}core{$ds}footer.php"); // Sertakan footer
+?>

@@ -1,0 +1,132 @@
+/* Custom CSS untuk Dashboard */
+
+body {
+    background-color: #f0f2f5; /* Warna background abu-abu terang */
+}
+
+.container-fluid {
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+.page-header {
+    margin-top: 0;
+    margin-bottom: 30px;
+    font-weight: bold;
+    color: #333;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+}
+
+/* --- Statistik Box Atas --- */
+.statistic-box {
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 25px;
+    margin-bottom: 20px;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Shadow lebih kuat */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 150px; /* Tinggi minimum untuk konsistensi */
+}
+
+.statistic-box .statistic-number {
+    font-size: 3.5em; /* Ukuran angka besar */
+    font-weight: bold;
+    margin-bottom: 10px;
+    line-height: 1; /* Menghilangkan spasi ekstra */
+}
+
+.statistic-box .statistic-label {
+    font-size: 1.2em; /* Ukuran label */
+    color: #666;
+}
+
+/* Warna untuk masing-masing box */
+.statistic-box.blue .statistic-number {
+    color: #007bff; /* Biru */
+}
+.statistic-box.blue {
+    border-top: 5px solid #007bff; /* Border atas untuk aksen */
+}
+
+.statistic-box.purple .statistic-number {
+    color: #6f42c1; /* Ungu */
+}
+.statistic-box.purple {
+    border-top: 5px solid #6f42c1;
+}
+
+.statistic-box.green .statistic-number {
+    color: #28a745; /* Hijau */
+}
+.statistic-box.green {
+    border-top: 5px solid #28a745;
+}
+
+
+/* --- Panel untuk Grafik dan Tabel --- */
+.panel {
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08); /* Shadow yang lebih lembut */
+    border: none; /* Menghilangkan border default panel */
+}
+
+.panel-heading {
+    background-color: #f7f7f7; /* Background heading yang lebih terang */
+    border-bottom: 1px solid #eee;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    padding: 15px 20px;
+}
+
+.panel-title {
+    font-weight: bold;
+    color: #333;
+    font-size: 1.1em;
+}
+
+.panel-body {
+    padding: 20px;
+}
+
+/* --- Tabel Kustom --- */
+.table > thead > tr > th {
+    background-color: #f0f2f5; /* Background header tabel */
+    color: #555;
+    font-weight: bold;
+    border-bottom: 2px solid #ddd;
+    text-align: left; /* Teks header rata kiri */
+    vertical-align: middle; /* Vertikal tengah */
+}
+
+.table > tbody > tr > td {
+    vertical-align: middle; /* Vertikal tengah */
+}
+
+.btn-xs {
+    padding: 4px 8px;
+    font-size: 12px;
+    line-height: 1.5;
+    border-radius: 3px;
+}
+
+/* Responsiveness (Bootstrap 3.3.1 sudah cukup baik) */
+@media (max-width: 767px) {
+    .statistic-box {
+        min-height: 120px; /* Kurangi tinggi di mobile */
+        padding: 20px;
+    }
+    .statistic-box .statistic-number {
+        font-size: 2.5em;
+    }
+    .statistic-box .statistic-label {
+        font-size: 1em;
+    }
+    .page-header {
+        font-size: 1.8em;
+    }
+}

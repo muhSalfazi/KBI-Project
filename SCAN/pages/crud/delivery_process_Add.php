@@ -1,0 +1,317 @@
+<?php
+include_once("../../connection.php");
+
+$kbndn = $_POST["kbndn"];
+$dnno = $_POST["dn_no"];
+
+$dn_from_kanban = substr($kbndn, 0, 16);
+$kbndnadm = substr($kbndn, 16, 7);
+$kbndnhpm = substr($kbndn, -13, 7);
+$kbndnsuzuki = substr($kbndn, 53, 15);
+
+
+$job_nos = null;
+$job_no_last = null;
+$job_source = null; // untuk menandai sumber
+
+// Cek di masterpart_mmki
+$cekJobNos_mmki = mysqli_query($mysqli, "SELECT * FROM masterpart_mmki WHERE PartNo='$kbndn'");
+if ($resultcekJobNos_mmki = mysqli_fetch_array($cekJobNos_mmki)) {
+    $job_nos = $resultcekJobNos_mmki['JobNo'];
+    $job_no_last = substr($job_nos, -1);
+    $job_source = 'MMKI';
+} else {
+    // Cek di masterpart_adm
+    $cekJobNos_adm = mysqli_query($mysqli, "SELECT * FROM masterpart_adm WHERE JobNo='$kbndnadm'");
+    if ($resultcekJobNos_adm = mysqli_fetch_array($cekJobNos_adm)) {
+        $job_nos = $resultcekJobNos_adm['JobNo'];
+        $job_no_last = substr($job_nos, -1);
+        $job_source = 'ADM';
+    } else {
+        // Cek di masterpart_hpm
+        $cekJobNos_hpm = mysqli_query($mysqli, "SELECT * FROM masterpart_hpm WHERE JobNo='$kbndnhpm'"); 
+        if ($resultcekJobNos_hpm = mysqli_fetch_array($cekJobNos_hpm)) {
+            $job_nos = $resultcekJobNos_hpm['JobNo'];
+            $job_no_last = substr($job_nos, -1);
+            $job_source = 'HPM';
+        } else {
+            // Cek di masterpart_hino
+            $cekJobNos_hino = mysqli_query($mysqli, "SELECT * FROM masterpart_hino WHERE PartNo='$kbndn'");
+            if ($resultcekJobNos_hino = mysqli_fetch_array($cekJobNos_hino)) {
+                $job_nos = $resultcekJobNos_hino['JobNo'];
+                $job_no_last = substr($job_nos, -1);
+                $job_source = 'HINO';
+            } else {
+                // Cek di masterpart_tmmin
+                $cekJobNos_tmmin = mysqli_query($mysqli, "SELECT * FROM masterpart_tmmin WHERE PartNo='$kbndn'");
+                if ($resultcekJobNos_tmmin = mysqli_fetch_array($cekJobNos_tmmin)) {
+                    $job_nos = $resultcekJobNos_tmmin['JobNo'];
+                    $job_no_last = substr($job_nos, -1);
+                    $job_source = 'TMMIN';
+                } else {
+                    // Cek di masterpart_suzuki
+                    $cekJobNos_suzuki = mysqli_query($mysqli, "SELECT * FROM masterpart_suzuki WHERE PartNo='$kbndnsuzuki'");
+                    if ($resultcekJobNos_suzuki = mysqli_fetch_array($cekJobNos_suzuki)) {
+                        $job_nos = $resultcekJobNos_suzuki['JobNo'];
+                        $job_no_last = substr($job_nos, -1);
+                        $job_source = 'SUZUKI';
+                    } else {
+                        header("Location: ../delivery_smart_process.php?dn_no=$dnno&&val=no");
+                        exit();
+                    }
+                }
+            }
+        }
+    }
+}
+
+// Validasi DN hanya untuk ADM & HPM
+if (in_array($job_source, ['ADM', 'HPM']) && $dn_from_kanban !== $dnno) {
+    header("Location: ../delivery_smart_process.php?dn_no=$dnno&&val=no");
+    exit();
+}
+
+// Cek apakah kanban sudah ada dalam tbl_kbndelivery
+$cekdn = mysqli_query($mysqli, "SELECT * FROM tbl_kbndelivery WHERE dn_no='$dnno' AND job_no='$job_nos'");
+$rowcekdn = mysqli_num_rows($cekdn);
+
+if ($rowcekdn > 0) {
+    // Cek qty_pcs di tbl_deliverynote terlebih dahulu
+    $cekqtydelivery_note = mysqli_query($mysqli, "SELECT 
+            tbl_kbndelivery.job_no,
+            COUNT(*) AS total,
+            masterpart_mmki.QtyPerKbn AS QtyPerKbn_mmki,
+            tbl_deliverynote.qty_pcs AS qty_mmki
+        FROM tbl_kbndelivery
+        LEFT JOIN masterpart_mmki ON masterpart_mmki.JobNo = tbl_kbndelivery.job_no
+        INNER JOIN tbl_deliverynote ON tbl_deliverynote.dn_no = tbl_kbndelivery.dn_no 
+            AND tbl_deliverynote.job_no = tbl_kbndelivery.job_no
+        WHERE tbl_kbndelivery.dn_no = '$dnno' AND tbl_kbndelivery.job_no = '$job_nos'
+        GROUP BY tbl_kbndelivery.job_no
+    ");
+    $resultcekqtydelivery_note = mysqli_fetch_array($cekqtydelivery_note);
+
+    if ($resultcekqtydelivery_note) {
+        // Pilih QtyPerKbn dari tbl_deliverynote
+        $qtyPerKbn = $resultcekqtydelivery_note['QtyPerKbn_mmki'];
+        $totalpcs = $resultcekqtydelivery_note['total'] * $qtyPerKbn;
+        $outstanding = $resultcekqtydelivery_note['qty_mmki'] - $totalpcs;
+    } else {
+        // Cek di tbl_deliveryadm
+        $cekqtydelivery_adm = mysqli_query($mysqli, "SELECT 
+                tbl_kbndelivery.job_no,
+                COUNT(*) AS total,
+                masterpart_adm.QtyPerKbn AS QtyPerKbn_adm,
+                tbl_deliveryadm.qty_pcs AS qty_adm
+            FROM tbl_kbndelivery
+            LEFT JOIN masterpart_adm ON masterpart_adm.JobNo = tbl_kbndelivery.job_no
+            INNER JOIN tbl_deliveryadm ON tbl_deliveryadm.dn_no = tbl_kbndelivery.dn_no
+                AND tbl_deliveryadm.job_no = tbl_kbndelivery.job_no
+            WHERE tbl_kbndelivery.dn_no = '$dnno' AND tbl_kbndelivery.job_no = '$job_nos'
+            GROUP BY tbl_kbndelivery.job_no
+        ");
+        $resultcekqtydelivery_adm = mysqli_fetch_array($cekqtydelivery_adm);
+
+        if ($resultcekqtydelivery_adm) {
+            // Pilih QtyPerKbn dari tbl_deliveryadm
+            $qtyPerKbn = $resultcekqtydelivery_adm['QtyPerKbn_adm'];
+            $totalpcs = $resultcekqtydelivery_adm['total'] * $qtyPerKbn;
+            $outstanding = $resultcekqtydelivery_adm['qty_adm'] - $totalpcs;
+        } else {
+            // Cek di tbl_deliveryhpm
+            $cekqtydelivery_hpm = mysqli_query($mysqli, "SELECT 
+                    tbl_kbndelivery.job_no,
+                    COUNT(*) AS total,
+                    masterpart_hpm.QtyPerKbn AS QtyPerKbn_hpm,
+                    tbl_deliveryhpm.qty_pcs AS qty_hpm
+                FROM tbl_kbndelivery
+                LEFT JOIN masterpart_hpm ON masterpart_hpm.JobNo = tbl_kbndelivery.job_no
+                INNER JOIN tbl_deliveryhpm ON tbl_deliveryhpm.dn_no = tbl_kbndelivery.dn_no
+                    AND tbl_deliveryhpm.job_no = tbl_kbndelivery.job_no
+                WHERE tbl_kbndelivery.dn_no = '$dnno' AND tbl_kbndelivery.job_no = '$job_nos'
+                GROUP BY tbl_kbndelivery.job_no
+            ");
+            $resultcekqtydelivery_hpm = mysqli_fetch_array($cekqtydelivery_hpm);
+
+            if ($resultcekqtydelivery_hpm) {
+                // Pilih QtyPerKbn dari tbl_deliveryhpm
+                $qtyPerKbn = $resultcekqtydelivery_hpm['QtyPerKbn_hpm'];
+                $totalpcs = $resultcekqtydelivery_hpm['total'] * $qtyPerKbn;
+                $outstanding = $resultcekqtydelivery_hpm['qty_hpm'] - $totalpcs;
+            } else {
+                // Cek di tbl_deliveryhino
+                $cekqtydelivery_hino = mysqli_query($mysqli, "SELECT 
+                        tbl_kbndelivery.job_no,
+                        COUNT(*) AS total,
+                        masterpart_hino.QtyPerKbn AS QtyPerKbn_hino,
+                        tbl_deliveryhino.qty_pcs AS qty_hino
+                    FROM tbl_kbndelivery
+                    LEFT JOIN masterpart_hino ON masterpart_hino.JobNo = tbl_kbndelivery.job_no
+                    INNER JOIN tbl_deliveryhino ON tbl_deliveryhino.dn_no = tbl_kbndelivery.dn_no
+                        AND tbl_deliveryhino.job_no = tbl_kbndelivery.job_no
+                    WHERE tbl_kbndelivery.dn_no = '$dnno' AND tbl_kbndelivery.job_no = '$job_nos'
+                    GROUP BY tbl_kbndelivery.job_no
+                ");
+                $resultcekqtydelivery_hino = mysqli_fetch_array($cekqtydelivery_hino);
+
+                if ($resultcekqtydelivery_hino) {
+                    // Pilih QtyPerKbn dari tbl_deliveryhino
+                    $qtyPerKbn = $resultcekqtydelivery_hino['QtyPerKbn_hino'];
+                    $totalpcs = $resultcekqtydelivery_hino['total'] * $qtyPerKbn;
+                    $outstanding = $resultcekqtydelivery_hino['qty_hino'] - $totalpcs;
+                } else {
+                    // Cek di tbl_deliverytmmin
+                    $cekqtydelivery_tmmin = mysqli_query($mysqli, "SELECT 
+                            tbl_kbndelivery.job_no,
+                            COUNT(*) AS total,
+                            masterpart_tmmin.QtyPerKbn AS QtyPerKbn_tmmin,
+                            tbl_deliverytmmin.qty_pcs AS qty_tmmin
+                        FROM tbl_kbndelivery
+                        LEFT JOIN masterpart_tmmin ON masterpart_tmmin.JobNo = tbl_kbndelivery.job_no
+                        INNER JOIN tbl_deliverytmmin ON tbl_deliverytmmin.dn_no = tbl_kbndelivery.dn_no
+                            AND tbl_deliverytmmin.job_no = tbl_kbndelivery.job_no
+                        WHERE tbl_kbndelivery.dn_no = '$dnno' AND tbl_kbndelivery.job_no = '$job_nos'
+                        GROUP BY tbl_kbndelivery.job_no
+                    ");
+                    $resultcekqtydelivery_tmmin = mysqli_fetch_array($cekqtydelivery_tmmin);
+
+                    if ($resultcekqtydelivery_tmmin) {
+                        // Pilih QtyPerKbn dari tbl_deliverytmmin
+                        $qtyPerKbn = $resultcekqtydelivery_tmmin['QtyPerKbn_tmmin'];
+                        $totalpcs = $resultcekqtydelivery_tmmin['total'] * $qtyPerKbn;
+                        $outstanding = $resultcekqtydelivery_tmmin['qty_tmmin'] - $totalpcs;
+                    } else {
+                        // Cek di tbl_deliverysuzuki
+                        $cekqtydelivery_suzuki = mysqli_query($mysqli, "SELECT 
+                                tbl_kbndelivery.job_no,
+                                COUNT(*) AS total,
+                                masterpart_suzuki.QtyPerKbn AS QtyPerKbn_suzuki,
+                                tbl_deliverysuzuki.qty_pcs AS qty_suzuki
+                            FROM tbl_kbndelivery
+                            LEFT JOIN masterpart_suzuki ON masterpart_suzuki.JobNo = tbl_kbndelivery.job_no
+                            INNER JOIN tbl_deliverysuzuki ON tbl_deliverysuzuki.dn_no = tbl_kbndelivery.dn_no
+                                AND tbl_deliverysuzuki.job_no = tbl_kbndelivery.job_no
+                            WHERE tbl_kbndelivery.dn_no = '$dnno' AND tbl_kbndelivery.job_no = '$job_nos'
+                            GROUP BY tbl_kbndelivery.job_no
+                        ");
+                        $resultcekqtydelivery_suzuki = mysqli_fetch_array($cekqtydelivery_suzuki);
+
+                        if ($resultcekqtydelivery_suzuki) {
+                            $qtyPerKbn = $resultcekqtydelivery_suzuki['QtyPerKbn_suzuki'];
+                            $totalpcs = $resultcekqtydelivery_suzuki['total'] * $qtyPerKbn;
+                            $outstanding = $resultcekqtydelivery_suzuki['qty_suzuki'] - $totalpcs;
+                        }
+                    }
+                } 
+            }
+        }
+    }
+
+    // Jika stok habis
+    if (!isset($outstanding)) {
+        $outstanding = null;
+    }
+    
+    if ($outstanding === 0) {
+        header("Location: ../delivery_smart_process.php?dn_no=$dnno&val=noscan");
+        exit();
+    }    
+}
+
+// Kanban belum ada dalam database atau stok masih ada
+$cekRows = mysqli_query($mysqli, "SELECT 
+                                    * 
+                                  FROM tbl_kbndelivery 
+                                  LEFT JOIN tbl_deliverynote ON tbl_deliverynote.dn_no = tbl_kbndelivery.dn_no 
+                                    AND tbl_deliverynote.job_no = tbl_kbndelivery.job_no 
+                                  LEFT JOIN tbl_deliveryadm ON tbl_deliveryadm.dn_no = tbl_kbndelivery.dn_no 
+                                    AND tbl_deliveryadm.job_no = tbl_kbndelivery.job_no 
+                                  LEFT JOIN tbl_deliveryhpm ON tbl_deliveryhpm.dn_no = tbl_kbndelivery.dn_no 
+                                    AND tbl_deliveryhpm.job_no = tbl_kbndelivery.job_no 
+                                  LEFT JOIN tbl_deliveryhino ON tbl_deliveryhino.dn_no = tbl_kbndelivery.dn_no 
+                                    AND tbl_deliveryhino.job_no = tbl_kbndelivery.job_no 
+                                  LEFT JOIN tbl_deliverytmmin ON tbl_deliverytmmin.dn_no = tbl_kbndelivery.dn_no 
+                                    AND tbl_deliverytmmin.job_no = tbl_kbndelivery.job_no 
+                                  WHERE tbl_kbndelivery.dn_no = '$dnno' 
+                                    AND tbl_kbndelivery.job_no = '$job_nos'");
+$rowcekRows = mysqli_num_rows($cekRows);
+
+$cekData = mysqli_query($mysqli, "SELECT 
+                                    * 
+                                  FROM tbl_kbndelivery 
+                                  LEFT JOIN tbl_deliverynote ON tbl_deliverynote.dn_no = tbl_kbndelivery.dn_no 
+                                    AND tbl_deliverynote.job_no = tbl_kbndelivery.job_no 
+                                  LEFT JOIN tbl_deliveryadm ON tbl_deliveryadm.dn_no = tbl_kbndelivery.dn_no 
+                                    AND tbl_deliveryadm.job_no = tbl_kbndelivery.job_no 
+                                  LEFT JOIN tbl_deliveryhpm ON tbl_deliveryhpm.dn_no = tbl_kbndelivery.dn_no 
+                                    AND tbl_deliveryhpm.job_no = tbl_kbndelivery.job_no 
+                                  LEFT JOIN tbl_deliveryhino ON tbl_deliveryhino.dn_no = tbl_kbndelivery.dn_no 
+                                    AND tbl_deliveryhino.job_no = tbl_kbndelivery.job_no 
+                                  LEFT JOIN tbl_deliverytmmin ON tbl_deliverytmmin.dn_no = tbl_kbndelivery.dn_no 
+                                    AND tbl_deliverytmmin.job_no = tbl_kbndelivery.job_no 
+                                  WHERE tbl_kbndelivery.dn_no = '$dnno' 
+                                    AND tbl_kbndelivery.job_no = '$job_nos'");
+$rowcekData = mysqli_fetch_array($cekData);
+
+// Tentukan seq_no berdasarkan kondisi
+if ($rowcekRows == 0 && $rowcekData['seq_no'] == '') {
+    $seq_nos = $job_no_last . '000001';
+} elseif ($rowcekRows >= 1 && $rowcekData['seq_no'] != '') {
+    $seq_nos = $job_no_last . '00000' . ($rowcekRows + 1);
+}
+
+$dndrkbndn = $dnno;
+$seq_nos3g = substr($seq_nos, -6);
+$kbndnall = $kbndn; //dari part ini udah ubah sequence
+
+
+// Cek di tbl_deliverynote terlebih dahulu
+$cekqtydn = mysqli_query($mysqli, "SELECT *, COUNT(*) AS cekdatadn FROM tbl_deliverynote WHERE dn_no='$dnno' AND job_no='$job_nos'");
+$resultcekqtydn = mysqli_fetch_array($cekqtydn);
+
+if ($resultcekqtydn['cekdatadn'] == 0) {
+    // Jika tidak ditemukan di tbl_deliverynote, cek di tbl_deliveryadm
+    $cekqtydn = mysqli_query($mysqli, "SELECT *, COUNT(*) AS cekdatadn FROM tbl_deliveryadm WHERE dn_no='$dnno' AND job_no='$job_nos'");
+    $resultcekqtydn = mysqli_fetch_array($cekqtydn);
+
+    if ($resultcekqtydn['cekdatadn'] == 0) {
+        // Jika tidak ditemukan di tbl_deliveryadm, cek di tbl_deliveryhpm
+        $cekqtydn = mysqli_query($mysqli, "SELECT *, COUNT(*) AS cekdatadn FROM tbl_deliveryhpm WHERE dn_no='$dnno' AND job_no='$job_nos'");
+        $resultcekqtydn = mysqli_fetch_array($cekqtydn);
+
+        if ($resultcekqtydn['cekdatadn'] == 0) {
+            // Jika tidak ditemukan di tbl_deliveryhpm, cek di tbl_deliveryhino
+            $cekqtydn = mysqli_query($mysqli, "SELECT *, COUNT(*) AS cekdatadn FROM tbl_deliveryhino WHERE dn_no='$dnno' AND job_no='$job_nos'");
+            $resultcekqtydn = mysqli_fetch_array($cekqtydn);
+
+            if ($resultcekqtydn['cekdatadn'] == 0) {
+                // Jika tidak ditemukan di tbl_deliveryhino, cek di tbl_deliverytmmin
+                $cekqtydn = mysqli_query($mysqli, "SELECT *, COUNT(*) AS cekdatadn FROM tbl_deliverytmmin WHERE dn_no='$dnno' AND job_no='$job_nos'");
+                $resultcekqtydn = mysqli_fetch_array($cekqtydn);
+
+                if ($resultcekqtydn['cekdatadn'] == 0) {
+                    // Jika belum ditemukan di semua, cek di tbl_deliverysuzuki
+                    $cekqtydn = mysqli_query($mysqli, "SELECT *, COUNT(*) AS cekdatadn FROM tbl_deliverysuzuki WHERE dn_no='$dnno' AND job_no='$job_nos'");
+                    $resultcekqtydn = mysqli_fetch_array($cekqtydn);
+                }
+            }
+        }
+    }
+}
+
+// Final logic untuk pengecekan dan redirect
+// Final logic untuk pengecekan dan redirect
+if (($dnno == $dndrkbndn && $outstanding > 0) ||
+    ($resultcekqtydelivery_note['totalpcs'] >= 0 && $resultcekqtydn['cekdatadn'] > 0) ||
+    ($resultcekqtydelivery_adm['cekdatadn'] > 0) ||
+    ($resultcekqtydelivery_hpm['cekdatadn'] > 0) ||
+    ($resultcekqtydelivery_hino['cekdatadn'] > 0) ||
+    ($resultcekqtydelivery_tmmin['cekdatadn'] > 0) ||
+    ($resultcekqtydelivery_suzuki['cekdatadn'] > 0)
+) {
+    header("Location: ../delivery_smart_processkbi.php?kbndn=$kbndnall&&val=ok");
+    exit();
+} else {
+    header("Location: ../delivery_smart_process.php?dn_no=$dnno&&val=no");
+    exit();
+}
