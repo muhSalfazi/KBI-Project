@@ -1,0 +1,5 @@
+User-agent: *
+Disallow: /public/css/
+Disallow: /public/js/
+Disallow: /public/assets/
+Disallow: /public/parts/

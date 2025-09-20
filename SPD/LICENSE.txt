@@ -1,0 +1,17 @@
+Copyright © 2024 MUHAMAD SALMAN FAUZI. All rights reserved.
+
+Lisensi Proprietary
+
+Dengan ini, pemilik hak cipta, Salman fauzi, memberikan izin untuk menggunakan perangkat lunak ini dengan syarat dan ketentuan berikut:
+
+1. **Penggunaan Terbatas**: Perangkat lunak ini hanya boleh digunakan untuk tujuan pribadi dan non-komersial. Penggunaan untuk tujuan komersial hanya diperbolehkan dengan izin tertulis dari pemilik hak cipta.
+
+2. **Larangan Modifikasi**: Pengguna tidak diperkenankan untuk memodifikasi, mendistribusikan, atau menjual kembali perangkat lunak ini tanpa izin tertulis dari pemilik hak cipta.
+
+3. **Pemberitahuan Hak Cipta**: Semua salinan perangkat lunak ini harus menyertakan pemberitahuan hak cipta ini dan semua catatan yang menyertainya.
+
+4. **Tidak Ada Jaminan**: Perangkat lunak ini disediakan "sebagaimana adanya", tanpa jaminan dalam bentuk apa pun, baik tersurat maupun tersirat, termasuk tetapi tidak terbatas pada jaminan perdagangan atau kesesuaian untuk tujuan tertentu.
+
+5. **Pelanggaran Lisensi**: Pelanggaran terhadap ketentuan lisensi ini dapat mengakibatkan pencabutan izin penggunaan dan tindakan hukum lebih lanjut.
+
+Dengan menggunakan perangkat lunak ini, Anda setuju untuk mematuhi syarat dan ketentuan yang ditetapkan dalam lisensi ini.
